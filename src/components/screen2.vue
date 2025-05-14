@@ -82,7 +82,7 @@ const trendingRoutes = ref([
   {
     id: 2,
     title: 'Jodhpur',
-    description: 'Jodhpur is a famous tourist spot with a palace, fort, and temples, set in the stark landscape of the Thar Desert.',
+    description: 'Jodhpur is a famous tourist spot with a palace,Is stark landscape of the Thar Desert.',
     image: images['/src/assets/photos/7.png'],
     featured: false,
     distance: '160 km',
@@ -112,7 +112,7 @@ const trendingRoutes = ref([
   {
     id: 5,
     title: 'Udaipur',
-    description: 'Udaipur, nicknamed the "City of Lakes," is a romantic destination in Rajasthan, India, known for its beautiful lakes and majestic palaces',
+    description: 'Udaipur, nicknamed the City of Lakes,is a romantic destination in Rajasthan.',
     image: images['/src/assets/photos/10.png'],
     featured: false,
     distance: '560 km',
@@ -122,7 +122,7 @@ const trendingRoutes = ref([
   {
     id: 6,
     title: 'Kashmir',
-    description: 'Kashmir is a breathtakingly beautiful region, often referred to as "Paradise on Earth" for its stunning natural landscapes.',
+    description: 'Kashmir is a breathtakingly beautiful region, often referred to as Paradise on Earth.',
     image: images['/src/assets/photos/6.png'],
     featured: false,
     distance: '250 km',
