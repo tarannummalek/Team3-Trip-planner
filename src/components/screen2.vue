@@ -82,7 +82,7 @@ const trendingRoutes = ref([
   {
     id: 2,
     title: 'Jodhpur',
-    description: 'Drive along the Bay of Bengal with charming stops and cafes.',
+    description: 'Jodhpur is a famous tourist spot with a palace, fort, and temples, set in the stark landscape of the Thar Desert.',
     image: images['/src/assets/photos/7.png'],
     featured: false,
     distance: '160 km',
@@ -112,7 +112,7 @@ const trendingRoutes = ref([
   {
     id: 5,
     title: 'Udaipur',
-    description: 'the Iconic route of Desert landscapes, forts, and golden sand dunes.',
+    description: 'Udaipur, nicknamed the "City of Lakes," is a romantic destination in Rajasthan, India, known for its beautiful lakes and majestic palaces',
     image: images['/src/assets/photos/10.png'],
     featured: false,
     distance: '560 km',
@@ -122,7 +122,7 @@ const trendingRoutes = ref([
   {
     id: 6,
     title: 'Kashmir',
-    description: 'A breathtaking journey through the Coffee plantations, hill views, and cool breeze.',
+    description: 'Kashmir is a breathtakingly beautiful region, often referred to as "Paradise on Earth" for its stunning natural landscapes.',
     image: images['/src/assets/photos/6.png'],
     featured: false,
     distance: '250 km',
@@ -416,14 +416,14 @@ onMounted(fetchForecasts)
         <p class="route-description">{{ route.description }}</p>
         <div class="route-meta">
           <div class="route-stats">
-            <div class="stat">
+            <!-- <div class="stat">
               <i class="fa fa-road"></i>
               <span>{{ route.distance }}</span>
-            </div>
-            <div class="stat">
+            </div> -->
+            <!-- <div class="stat">
               <i class="fa fa-clock"></i>
               <span>{{ route.duration }}</span>
-            </div>
+            </div> -->
           </div>
           <!-- Bookmark Icon -->
           <i 
