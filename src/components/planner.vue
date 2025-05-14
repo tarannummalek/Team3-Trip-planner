@@ -1,17 +1,18 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios';
+import { useStopStore } from '@/stores/useStopStore';
 const images = import.meta.glob('@/assets/photos/*.png', { eager: true, import: 'default' })
 
 const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 const isUserRegistered = ref(userStore.isRegistered);
-
+const stopStore = useStopStore();
 console.log(userStore.userData.username);
-
+const isLoggedIn = computed(() => route.query.isLoggedIn === 'true');
 
 const favorites = ref([])
 
@@ -29,6 +30,7 @@ const handleLoginClick = () => {
 // Logout function
 const logout = () => {
   userStore.logout()
+  stopStore.$reset()
   router.push('/')
 }
 
@@ -279,27 +281,20 @@ onMounted(fetchForecasts)
   <div id="app">
     <!-- Header -->
     <header class="header">
-      <a href="/planner" style="text-decoration: none;">
+      <a href="/" style="text-decoration: none;">
 
       
       <h1>Trip<span style="color: black;">M</span>ate</h1> </a>
       <nav>
         <router-link to="/trips">Your Trips</router-link>
         <router-link to="/favorites">Favorites</router-link>
-        <button @click="logout" class="logout-button">Logout</button>
+        <button v-if="!isLoggedIn" @click="logout" class="logout-button">Logout</button>
        
       </nav>
     </header>
 
     <!-- Hero Banner -->
     <section class="hero-banner">
-      <div class="weather-widget">
-        <i class="fa fa-sun"></i>
-        <div class="weather-info">
-          <h4>Today's Weather</h4>
-          <p>72°F - Clear skies</p>
-        </div>
-      </div>
       <div class="hero-text">
         <h2>Welcome {{ userStore.userData.username }}</h2>
         <h2>Your Adventure Awaits</h2>
@@ -338,10 +333,13 @@ onMounted(fetchForecasts)
     <div class="main-content">
       <!-- Upcoming Trips -->
       <section class="upcoming">
-  <div class="section-header">
+  <!-- <div class="section-header">
     <h2>Upcoming Trips</h2>
     <router-link to="#" class="view-all">View All</router-link>
-  </div>
+  </div> -->
+
+  
+
 
   <!-- If the user is not registered -->
   <div class="trip-placeholder" v-if="!isUserRegistered">
@@ -360,42 +358,51 @@ onMounted(fetchForecasts)
   </div>
 </div>
 
-  <!-- If the user is registered -->
+
+<!-- If the user is registered -->
+ <div v-if="!stopStore.source && !stopStore.destination && stopStore.stops.length === 0 && !isLoggedIn" class="no-trips">
+  <p>No latest trips found. Start planning your next adventure!</p>
+</div>
   <div v-else>
-    <div v-if="upcomingTrips.length === 0" class="no-trips">
-      <p>No upcoming trips found. Start planning your next adventure!</p>
+<div class="main-content container my-4" v-if="!isLoggedIn">
+  <section class="upcoming">
+    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+      <h2>Latest Trips</h2>
+      <!-- <router-link to="#" class="btn btn-primary">View All</router-link> -->
     </div>
-    <div v-else>
-      <div class="trip-card" v-for="trip in upcomingTrips" :key="trip.id">
-        <div class="trip-image">
-          <img :src="trip.image" :alt="trip.title" />
+
+    <div class="trip-card shadow-sm p-3">
+      <div class="trip-details">
+        <h5 class="card-title mb-3">Trip ID: {{ stopStore.tripId || 'N/A' }}</h5>
+        
+        <div class="mb-2">
+          <i class="bi bi-geo-alt-fill text-danger"></i>
+          <strong>Source:</strong> {{ stopStore.source || 'N/A' }}
         </div>
-        <div class="trip-details">
-          <h3>{{ trip.title }}</h3>
-          <p>{{ trip.description }}</p>
-          <div class="trip-m">
-            <div class="mItem">
-              <i class="fa fa-calendar"></i>
-              <span>{{ trip.dates }}</span>
-            </div>
-            <div class="mItem">
-              <i class="fa fa-clock"></i>
-              <span>{{ trip.duration }}</span>
-            </div>
-            <div class="mItem">
-              <i class="fa fa-users"></i>
-              <span>{{ trip.travelers }} travelers</span>
-            </div>
-          </div>
+        
+        <div class="mb-2">
+          <i class="bi bi-flag-fill text-success"></i>
+          <strong>Destination:</strong> {{ stopStore.destination || 'N/A' }}
         </div>
-        <div class="trip-actions">
-          <button class="action-button view-button">VIEW</button>
-          <button class="action-button edit-button">EDIT</button>
+
+        <div>
+          <i class="bi bi-map-fill text-info"></i>
+          <strong>Stops:</strong>
+          <ul v-if="stopStore.stops.length" class="list-unstyled ms-3 mt-1">
+            <li v-for="(stop, index) in stopStore.stops" :key="index">📍 {{ stop.name }}</li>
+          </ul>
+          <p v-else class="text-muted ms-2">No stops added yet.</p>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+</div>
+</div>
+  
+   
 </section>
+
+
 
       <section class="trending">
   <div class="section-header">

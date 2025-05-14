@@ -45,7 +45,10 @@ function signIn(){
         error.value = "Incorrect"
     }
 }
-
+const goToPlanner = (isLoggedIn) => {
+  // Pass 'isLoggedIn' as a query parameter to the next page
+  router.push({ name: 'planner', query: { isLoggedIn } });
+};
 </script>
 
 <template>
@@ -63,7 +66,10 @@ function signIn(){
       <h1>Discover the Freedom<br />of the Open Road</h1>
       <p>Plan, organize, and embark <br>on your next great adventure with TripMate.</p>
       <div class="mainbuttons">
-        <button class="startbtn" @click="$router.push('/planner')">GET STARTED</button>
+        <!-- <button class="startbtn" @click="$router.push('/planner')">GET STARTED</button>
+          -->
+        
+        <button class="startbtn" @click="goToPlanner(true)">GET STARTED</button>
         <button class="registerbtn" @click="showRegister = true">Register</button>
       </div>
     </div>
@@ -73,7 +79,7 @@ function signIn(){
       <div class="modal-content">
         <h2>Sign In</h2>
         <form @submit.prevent="signIn">
-          <input  placeholder="Email" v-model="username" />
+          <input  placeholder="Username" v-model="username" />
           <input type="password" placeholder="Password" v-model="password" />
           <button class="form-btn" type="submit">Sign In</button>
         </form>

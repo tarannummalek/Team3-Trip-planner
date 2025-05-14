@@ -7,6 +7,7 @@ import { useStopStore } from '@/stores/useStopStore';
 import draggable from 'vuedraggable';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
 
 
@@ -39,6 +40,7 @@ const destination = computed({
 
 let map;
 let markers = [];
+const authStore = useUserStore();
 
 const customIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -57,7 +59,10 @@ const customIcon = L.icon({
 
 
 onMounted(async () => {
+  
   const savedData = localStorage.getItem('stopStore');
+  source.value = '';
+  destination.value = '';
 
   if (savedData) {
     
@@ -84,6 +89,15 @@ onMounted(async () => {
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
+
+  const userTripId = authStore.currentUser?.tripid;
+
+  if (userTripId) {
+    store.tripId = userTripId;
+    console.log('Transferred trip ID to store:', store.tripId);
+  } else {
+    console.warn('No trip ID found in authStore.currentUser');
+  }
 });
 
 
@@ -240,7 +254,6 @@ const clearMarkers = () => {
       <nav>
         <router-link to="/trips">Your Trips</router-link>
         <router-link to="/favorites">Favorites</router-link>
-        <button @click="logout" class="logout-button">Logout</button>
        
       </nav>
     </header>

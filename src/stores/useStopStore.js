@@ -5,6 +5,7 @@ export const useStopStore = defineStore('stopStore', () => {
     const stops = ref([])
     const source = ref('')
     const destination = ref('')
+    const tripId = ref(null); 
     function $reset() {
         source.value = '';
         destination.value = '';
@@ -24,7 +25,7 @@ export const useStopStore = defineStore('stopStore', () => {
         stops.value = []
     }
 
-    return {stops, source, destination,addStop,removeStop,clearStops,$reset}
+    return {stops, source, destination,addStop,removeStop,clearStops,$reset,tripId}
 }
 , {
     persist: true 
