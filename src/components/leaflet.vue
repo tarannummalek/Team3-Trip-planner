@@ -248,7 +248,7 @@ const clearMarkers = () => {
       <h4 class="mb-3">Route Planner</h4>
 
 
-      <input v-model="source" @input="suggest('source')" list="source-suggestions" placeholder="abcd" class="form-control mb-2" />
+      <input v-model="source" @input="suggest('source')" list="source-suggestions" placeholder="Source" class="form-control mb-2" />
       <datalist id="source-suggestions">
         <option v-for="(s, i) in sourceSuggestions" :key="i" :value="s.display_name" />
       </datalist>

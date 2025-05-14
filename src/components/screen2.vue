@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios';
 const images = import.meta.glob('@/assets/photos/*.png', { eager: true, import: 'default' })
 
 const userStore = useUserStore()
@@ -183,48 +184,46 @@ const roadTripTips = ref([
     description: 'Prepare a road trip playlist to keep the mood lively and enjoyable.'
   }
 ])
-const weatherForecasts = ref([
-{
-  id: 1,
-    city: 'Mumbai',
-    dateRange: 'May 15-17, 2025',
-    temperature: '32°C',
-    condition: 'Sunny',
-    icon: '☀️',
-    humidity: '70%',
-    wind: '10 km/h'
-  },
-  {
-    id: 2,
-    city: 'Jaipur',
-    dateRange: 'June 1-3, 2025',
-    temperature: '40°C',
-    condition: 'Hot and Dry',
-    icon: '🔥',
-    humidity: '20%',
-    wind: '18 km/h'
-  },
-  {
-    id: 3,
-    city: 'Shimla',
-    dateRange: 'June 4-6, 2025',
-    temperature: '18°C',
-    condition: 'Cool',
-    icon: '❄️',
-    humidity: '50%',
-    wind: '5 km/h'
-  },
-  {
-    id: 4,
-    city: 'Bangalore',
-    dateRange: 'May 22-25, 2025',
-    temperature: '25°C',
-    condition: 'Partly Cloudy',
-    icon: '⛅',
-    humidity: '60%',
-    wind: '12 km/h'
+const weatherForecasts = ref([])
+ 
+const apiKey = '3e5731c0e204f4579581cc285733d0cf' 
+const cities = ['Jaipur', 'Ahmedabad', 'Goa', 'Kerala'] 
+ 
+const fetchForecasts = async () => {
+  const results = []
+ 
+  for (const city of cities) {
+    try {
+      const response = await axios.get(
+        'https://api.openweathermap.org/data/2.5/forecast',
+        {
+          params: {
+            q: city,
+            appid: apiKey,
+            units: 'metric'
+          }
+        }
+      )
+ 
+      const data = response.data
+      const firstForecast = data.list[0]
+      
+      results.push({
+        city: data.city.name,
+        dateRange: new Date(firstForecast.dt_txt).toLocaleDateString(),
+        icon: firstForecast.weather[0].icon,
+        temperature: Math.round(firstForecast.main.temp),
+        condition: firstForecast.weather[0].description,
+        humidity: firstForecast.main.humidity,
+        wind: firstForecast.wind.speed
+      })
+    } catch (err) {
+      console.error(`Error fetching forecast for ${city}:`, err)
+    }
   }
-])
+ 
+  weatherForecasts.value = results
+}
 
 const popularStops = ref([
   {
@@ -270,6 +269,7 @@ const popularStops = ref([
 ])
 
 
+onMounted(fetchForecasts)
 </script>
 
 <template>
@@ -446,7 +446,11 @@ const popularStops = ref([
       :key="forecast.id">
       <h4>{{ forecast.city }}</h4>
       <p class="date-range">{{ forecast.dateRange }}</p>
-      <div class="weather-icon">{{ forecast.icon }}</div>
+      <img 
+          :src="'http://openweathermap.org/img/wn/' + forecast.icon + '.png'" 
+          alt="icon" 
+          width="50"
+        />
       <p class="temperature">{{ forecast.temperature }}</p>
       <p class="condition">{{ forecast.condition }}</p>
       <div class="details">
