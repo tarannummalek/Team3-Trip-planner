@@ -9,23 +9,41 @@ const userStore = useUserStore()
 const username = ref('')
 const email = ref('')
 const password = ref('')
+const tripid = ref('')
 
 const showRegister = ref(false)
+const showSignIn = ref(false)
 
 
-console.log(userStore.userData);
+console.log(userStore.userData.username);
 
 
 const register = () => {
-    userStore.registerUser({
-      username: username.value,
+  const formData =
+    { 
+        username: username.value,
         email: email.value,
-        password: password.value
-    },
-  
-  )
+        password: password.value,
+        tripid: Math.round(Math.random()*1000),
+    };
    
-    router.push('/planner')
+    if(userStore.registerUser(formData)){
+        router.push('/planner')
+    } 
+}
+
+function signIn(){
+    
+    const loguser = userStore.signinUser({
+        username: username.value,
+        password: password.value
+    })
+
+    if (loguser){
+        router.push('/planner')
+    }else{
+        error.value = "Incorrect"
+    }
 }
 
 </script>
@@ -35,8 +53,10 @@ const register = () => {
     <div class="overlay"></div>
 
     <nav class="navbar">
+     <a href="#" style="text-decoration: none;">
       <div class="logo">Trip<span style="color: black;">M</span>ate</div>
-      <!-- <button class="signBtn" @click="showSignIn = true">Sign In</button> -->
+     </a> 
+      <button class="signBtn" @click="showSignIn = true">Sign In</button>
     </nav>
 
     <div class="hero-content">
@@ -45,6 +65,19 @@ const register = () => {
       <div class="mainbuttons">
         <button class="startbtn" @click="$router.push('/planner')">GET STARTED</button>
         <button class="registerbtn" @click="showRegister = true">Register</button>
+      </div>
+    </div>
+
+    <!-- Sign In Form Modal -->
+    <div class="modal" v-if="showSignIn">
+      <div class="modal-content">
+        <h2>Sign In</h2>
+        <form @submit.prevent="signIn">
+          <input  placeholder="Email" v-model="username" />
+          <input type="password" placeholder="Password" v-model="password" />
+          <button class="form-btn" type="submit">Sign In</button>
+        </form>
+        <button class="close-btn" @click="showSignIn = false">Close</button>
       </div>
     </div>
 
@@ -57,7 +90,7 @@ const register = () => {
           <input type="text" placeholder="Username" v-model="username" />
           <input type="email" placeholder="Email" v-model="email" />
           <input type="password" placeholder="Password" v-model="password" />
-          <button type="submit">Register</button>
+          <button class="form-btn" type="submit">Register</button>
         </form>
         <button class="close-btn" @click="showRegister = false">Close</button>
       </div>
@@ -102,6 +135,7 @@ const register = () => {
     font-size: 2rem;
     font-weight: bold;
     letter-spacing: 1px;
+    color: white;
   }
   
   
@@ -216,6 +250,21 @@ const register = () => {
   font-weight: bold;
   cursor: pointer;
 }
+
+.form-btn {
+  width: 330px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 6px;
+}
+
+.form-btn:hover {
+  background-color: #aaa;
+}
+
+
+
+
 
 .close-btn {
   margin-top: 20px;

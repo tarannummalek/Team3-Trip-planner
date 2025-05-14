@@ -10,6 +10,9 @@ const router = useRouter()
 const route = useRoute()
 const isUserRegistered = ref(userStore.isRegistered);
 
+console.log(userStore.userData.username);
+
+
 const favorites = ref([])
 
 const handleRegisterClick = () => {
@@ -276,7 +279,10 @@ onMounted(fetchForecasts)
   <div id="app">
     <!-- Header -->
     <header class="header">
-      <h1>Trip<span style="color: black;">M</span>ate</h1>
+      <a href="/planner" style="text-decoration: none;">
+
+      
+      <h1>Trip<span style="color: black;">M</span>ate</h1> </a>
       <nav>
         <router-link to="/trips">Your Trips</router-link>
         <router-link to="/favorites">Favorites</router-link>
@@ -295,9 +301,10 @@ onMounted(fetchForecasts)
         </div>
       </div>
       <div class="hero-text">
+        <h2>Welcome {{ userStore.userData.username }}</h2>
         <h2>Your Adventure Awaits</h2>
         <p>Start planning your next road trip today and explore the most beautiful routes across the country.</p>
-        <button class="cta-button"> <router-link to="/leaflet"><i class="fa fa-car"></i> &nbsp&nbspPlan Your Trip</router-link></button>
+        <button class="cta-button"> <router-link to="/leaflet" style="text-decoration: none; color: white;"><i class="fa fa-car"></i> &nbsp; &nbsp; Plan Your Trip</router-link></button>
       </div>
     </section>
 

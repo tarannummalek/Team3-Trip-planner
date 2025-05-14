@@ -235,7 +235,8 @@ const clearMarkers = () => {
 
 <template>
    <header class="header">
-      <h1>Trip<span style="color: black;">M</span>ate</h1>
+    <a href="/planner" style="text-decoration: none;">
+      <h1>Trip<span style="color: black;">M</span>ate</h1></a>
       <nav>
         <router-link to="/trips">Your Trips</router-link>
         <router-link to="/favorites">Favorites</router-link>
